@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>数据结构01</title>
+    <link href="/2020/04/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%8401/"/>
+    <url>/2020/04/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%8401/</url>
+    
+    <content type="html"><![CDATA[<p>[toc]</p><h2 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h2><p>所有代码的执行时间 T(n) 与每行代码的执行次数 n 成正比。即：</p><p>T(n) = O （f(n)）</p><p>T(n) 表示代码执行的时间；n 表示数据规模的大小；f(n) 表示每行代码执行的次数总和。因为这是一个公式，所以用 f(n) 来表示。公式中的 O，表示代码的执行时间 T(n) 与 f(n) 表达式成正比。</p><p>大 O 时间复杂度实际上并不具体表示代码真正的执行时间，而是表示<strong>代码执行时间随数据规模增长的变化趋势</strong>，所以，也叫作渐进时间复杂度（asymptotic time complexity），简称<strong>时间复杂度</strong>。</p><h2 id="如何分析一段代码的时间复杂度？"><a href="#如何分析一段代码的时间复杂度？" class="headerlink" title="如何分析一段代码的时间复杂度？"></a>如何分析一段代码的时间复杂度？</h2><h3 id="1、-只关注循环执行次数最多的一段代码"><a href="#1、-只关注循环执行次数最多的一段代码" class="headerlink" title="1、 只关注循环执行次数最多的一段代码"></a>1、 只关注循环执行次数最多的一段代码</h3><p>在分析一个算法、一段代码的时间复杂度的时候，<strong>关注循环执行次数最多的那一段代码</strong>。这段核心代码执行次数的 n 的量级，就是整段要分析代码的时间复杂度。</p><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">cal</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;   <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;   <span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;   <span class="hljs-keyword">for</span> (; i &lt;= n; ++i) &#123;  <span class="hljs-comment">//被执行n次</span>     sum = sum + i;       <span class="hljs-comment">//被执行n次</span>   &#125;   <span class="hljs-keyword">return</span> sum;&#125;</code></pre><p>上述代码的时间复杂的为：O(n)。</p><h3 id="2、加法法则：总复杂度等于量级最大的那段代码的复杂度"><a href="#2、加法法则：总复杂度等于量级最大的那段代码的复杂度" class="headerlink" title="2、加法法则：总复杂度等于量级最大的那段代码的复杂度"></a>2、加法法则：总复杂度等于量级最大的那段代码的复杂度</h3><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">cal</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;   <span class="hljs-keyword">int</span> sum_1 = <span class="hljs-number">0</span>;   <span class="hljs-keyword">int</span> p = <span class="hljs-number">1</span>;   <span class="hljs-keyword">for</span> (; p &lt; <span class="hljs-number">100</span>; ++p) &#123;     sum_1 = sum_1 + p;   &#125;   <span class="hljs-keyword">int</span> sum_2 = <span class="hljs-number">0</span>;   <span class="hljs-keyword">int</span> q = <span class="hljs-number">1</span>;   <span class="hljs-keyword">for</span> (; q &lt; n; ++q) &#123;     sum_2 = sum_2 + q;   &#125;    <span class="hljs-keyword">int</span> sum_3 = <span class="hljs-number">0</span>;   <span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;   <span class="hljs-keyword">int</span> j = <span class="hljs-number">1</span>;   <span class="hljs-keyword">for</span> (; i &lt;= n; ++i) &#123;     j = <span class="hljs-number">1</span>;      <span class="hljs-keyword">for</span> (; j &lt;= n; ++j) &#123;       sum_3 = sum_3 +  i * j;     &#125;   &#125;    <span class="hljs-keyword">return</span> sum_1 + sum_2 + sum_3; &#125;</code></pre><p>第一段代码循环执行了 100 次，所以是一个<strong>常量</strong>的执行时间，跟 n 的规模无关。（<em>回到时间复杂度的概念来说，它表示的是一个算法执行效率与数据规模增长的变化趋势，所以不管常量的执行时间多大，我们都可以忽略掉。因为它本身对增长趋势并没有影响。</em>）</p><p>第二、三段代码的时间复杂度是<br>$$<br>O(n)<br>$$</p><p>$$<br>O(n^2)<br>$$</p><p>综合这三段代码的时间复杂度，我们取其中最大的量级。所以，整段代码的时间复杂度就为 O(n2)。也就是说：<strong>总的时间复杂度就等于量级最大的那段代码的时间复杂度</strong>。那我们将这个规律抽象成公式就是：</p><p>如果 T1(n)=O(f(n))，T2(n)=O(g(n))；那么 T(n)=T1(n)+T2(n)=max(O(f(n)), O(g(n))) =O(max(f(n), g(n))).</p><h3 id="3、乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积"><a href="#3、乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积" class="headerlink" title="3、乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积"></a>3、乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积</h3><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">cal</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;   <span class="hljs-keyword">int</span> ret = <span class="hljs-number">0</span>;    <span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;   <span class="hljs-keyword">for</span> (; i &lt; n; ++i) &#123;     ret = ret + f(i);   &#125;  &#125;   <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;  <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;  <span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>;  <span class="hljs-keyword">for</span> (; i &lt; n; ++i) &#123;    sum = sum + i;  &#125;   <span class="hljs-keyword">return</span> sum; &#125;</code></pre><p>单独看 cal() 函数。假设 f() 只是一个普通的操作，那第 4～6 行的时间复杂度就是，T1(n) = O(n)。但 f() 函数本身不是一个简单的操作，它的时间复杂度是 T2(n) = O(n)，所以，整个 cal() 函数的时间复杂度就是：<br>$$<br>T(n) = T1(n) * T2(n) = O(n*n) = O(n^2)<br>$$</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>数据结构</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>js</title>
     <link href="/2020/04/27/js/"/>
     <url>/2020/04/27/js/</url>
